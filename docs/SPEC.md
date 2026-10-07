@@ -200,3 +200,7 @@ Esta entrega é a especificação consolidada. O site e seus testes ainda não f
 ## Atualização de serviços confirmados
 
 O usuário confirmou que Juliana também é chef domiciliar, atende em domicílios e oferece tábuas de comidas e cestas de café da manhã, além de eventos. Outras opções são tratadas sob consulta, sem promessa de atendimento irrestrito. Home, apresentação e orçamento incluem essas modalidades; quantidade de pessoas aceita 1–10 e 11–30. O serviço selecionado aparece no resumo, WhatsApp e registro do lead. Região e disponibilidade continuam pendentes de confirmação.
+
+## Atualização de apresentação dos serviços
+
+A pedido do usuário, “Cestas de café da manhã” foi substituído por “Encontros à mesa”, com foco em almoços e jantares em casa. A descrição aprovada é: “Uma refeição especial em casa, pensada com Juliana para receber e compartilhar.” A atualização vale para a home e para novos pedidos do formulário; registros antigos permanecem preservados.
