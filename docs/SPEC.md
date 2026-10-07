@@ -196,3 +196,7 @@ Essas pendências não impedem estrutura, design e desenvolvimento local. Impede
 6. Preparar entrega para publicação com configuração documentada. Publicação não é presumida por um build bem-sucedido.
 
 Esta entrega é a especificação consolidada. O site e seus testes ainda não foram implementados ou executados.
+
+## Atualização de serviços confirmados
+
+O usuário confirmou que Juliana também é chef domiciliar, atende em domicílios e oferece tábuas de comidas e cestas de café da manhã, além de eventos. Outras opções são tratadas sob consulta, sem promessa de atendimento irrestrito. Home, apresentação e orçamento incluem essas modalidades; quantidade de pessoas aceita 1–10 e 11–30. O serviço selecionado aparece no resumo, WhatsApp e registro do lead. Região e disponibilidade continuam pendentes de confirmação.

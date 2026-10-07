@@ -1,3 +1,4 @@
+import {validateLead} from './lib/leads.js';
 import http from 'node:http';
 import { readFile, writeFile, mkdir, rename } from 'node:fs/promises';
 import { resolve, extname } from 'node:path';
@@ -23,9 +24,9 @@ http.createServer(async(req,res)=>{
  const ip=req.socket.remoteAddress;const now=Date.now();const times=(attempts.get(ip)||[]).filter(t=>now-t<60000);if(times.length>=20)return json(res,429,{error:'Muitas tentativas. Aguarde um minuto.'});times.push(now);attempts.set(ip,times);
  let body='';for await(const chunk of req){body+=chunk;if(body.length>12000)return json(res,413,{error:'Pedido muito longo.'});}
  let d;try{d=JSON.parse(body);}catch{return json(res,400,{error:'Dados inválidos.'});}
- if(!d || typeof d!=='object' || typeof d.name!=='string'||d.name.trim().length<2||d.name.length>120||typeof d.phone!=='string'||!/^\d{10,15}$/.test(d.phone.replace(/\D/g,''))||typeof d.city!=='string'||!d.city.trim()||d.city.length>160||!['Celebração','Aniversário','Casamento','Corporativo','Outro'].includes(d.event)||!['Até 30','31–50','51–100','101–150','151–200','Mais de 200'].includes(d.guests)||typeof d.notes!=='string'||d.notes.length>2000||!d.privacy||typeof d.key!=='string'||! /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(d.key)|| (d.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.email)) || (d.date && (!/^\d{4}-\d{2}-\d{2}$/.test(d.date)||Number.isNaN(Date.parse(d.date))||new Date(d.date).toISOString().slice(0,10)!==d.date||d.date<new Date().toISOString().slice(0,10))))return json(res,400,{error:'Confira os campos do pedido.'});
+ if(!validateLead(d))return json(res,400,{error:'Confira os campos do pedido.'});
  const work=queue.then(async()=>{const existing=leads.find(x=>x.key===d.key);
- const lead={id:existing?.id||randomUUID(),key:d.key,createdAt:existing?.createdAt||new Date().toISOString(),updatedAt:new Date().toISOString(),status:'novo',name:d.name.trim(),phone:d.phone,event:d.event,guests:d.guests,date:d.date||null,city:d.city.trim(),experience:'Quero orientação',notes:d.notes,email:d.email||null,privacyVersion:'1.0',source:'site'};
+ const lead={id:existing?.id||randomUUID(),key:d.key,createdAt:existing?.createdAt||new Date().toISOString(),updatedAt:new Date().toISOString(),status:'novo',name:d.name.trim(),phone:d.phone,event:d.event,guests:d.guests,date:d.date||null,city:d.city.trim(),experience:d.experience||'Quero orientação',notes:d.notes,email:d.email||null,privacyVersion:'1.0',source:'site'};
  const next=existing?leads.map(x=>x.id===existing.id?lead:x):[...leads,lead];await writeFile(file+'.tmp',JSON.stringify(next,null,2),{mode:0o600});await rename(file+'.tmp',file);leads=next;return lead.id;});queue=work.catch(()=>{});return json(res,201,{id:await work});
  }
  if(req.method!=='GET')return json(res,405,{error:'Método não permitido.'});
