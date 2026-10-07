@@ -31,3 +31,7 @@ Variáveis opcionais: `WHATSAPP_NUMBER` para trocar o contato e `SITE_URL` para 
 Confirmar região atendida, autorizações de imagem e política final de privacidade/retenção. Serviços publicados: chef em domicílio, gastronomia para eventos, tábuas gastronômicas e encontros à mesa. A foto de Juliana foi enviada e identificada pelo usuário. Páginas individuais de eventos e painel administrativo permanecem como evoluções.
 
 Use o checkout existente; não crie worktree durante setup. Na nuvem, instale com lockfile, faça o build e reinicie o servidor em novas tarefas. Processos não sobrevivem ao snapshot.
+
+## Efeito da galeria
+
+O componente TypeScript `components/ui/animated-loading-skeleton.tsx` adapta o exemplo enviado às fotografias existentes: entrada suave, indicador de carregamento e lupa decorativa sobre a grade. Usa Framer Motion e o CSS do projeto, sem precisar de Tailwind ou shadcn para este efeito. A animação pode ser pausada, respeita movimento reduzido e para fora da área visível. `components/ui` concentra componentes reutilizáveis.

@@ -22,3 +22,13 @@
 .editorial-text .line{justify-self:end;align-self:center}
 .experience-layout figure img{height:auto;aspect-ratio:4/3;object-fit:cover}
 @media(max-width:800px){.editorial{grid-template-columns:1fr;gap:28px}.editorial-text{grid-template-columns:1fr;padding-top:28px;margin-top:0;gap:20px}.editorial-text .eyebrow{margin-bottom:0}.editorial-text .line{justify-self:start}.editorial-text p{font-size:33px}.experience-layout figure img{height:auto}}
+
+/* Efeito de galeria: entrada suave, carregamento e lupa decorativa. */
+.editorial{position:relative}
+.editorial>figure{position:relative}
+.gallery-search{position:absolute;left:0;top:0;z-index:2;pointer-events:none;width:48px;height:48px}
+.gallery-search-circle{display:grid;place-items:center;width:48px;height:48px;border-radius:50%;color:var(--green);background:#f5f1e8e8;box-shadow:0 0 24px #293d3240;backdrop-filter:blur(4px)}
+.gallery-effect-toggle{position:absolute;right:0;top:-32px;border:0;border-bottom:1px solid var(--line);background:none;font-size:10px;padding:2px 0;color:var(--ink)}
+.gallery-loading::before{content:'';position:absolute;top:0;left:0;width:100%;aspect-ratio:4/3;background:linear-gradient(90deg,#e2dfd4 25%,#f5f1e8 50%,#e2dfd4 75%);background-size:200% 100%;animation:gallery-shimmer 1.5s ease-in-out infinite;z-index:1;pointer-events:none}
+@keyframes gallery-shimmer{from{background-position:200% 0}to{background-position:-200% 0}}
+@media(prefers-reduced-motion:reduce){.gallery-loading::before{animation:none}.gallery-search,.gallery-effect-toggle{display:none}}
