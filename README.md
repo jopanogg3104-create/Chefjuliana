@@ -16,7 +16,7 @@ A chave de edição permanece apenas na sessão do navegador. Recarregar a pági
 
 ## Antes de publicar
 
-Confirmar serviços, região, telefone, autorizações de imagem, textos comerciais, identidade do retrato e política de retenção/contato de privacidade. A seção da chef usa uma fotografia da mesa porque o retrato da conversa não está disponível como arquivo local confirmado. As experiências são descrições visuais do material, sem prometer categorias comerciais ainda não confirmadas. O aviso de privacidade é preliminar e precisa de finalização para uso comercial.
+Confirmar serviços, região, telefone, autorizações de imagem, textos comerciais, identidade do retrato e política de retenção/contato de privacidade. A seção “Esta é a Juliana” utiliza o retrato enviado e identificado pelo usuário como a Chef Juliana Nogueira. As experiências são descrições visuais do material, sem prometer categorias comerciais ainda não confirmadas. O aviso de privacidade é preliminar e precisa de finalização para uso comercial.
 
 A home usa foto horizontal para evitar ampliar vídeos verticais de baixa resolução. Há vídeo real, curto e sem áudio no portfólio. A arquitetura foi simplificada para HTML/CSS/JavaScript e servidor Node, em vez de Next.js: sem build, com poucas dependências e fontes locais. Páginas individuais de eventos e painel administrativo continuam como evoluções da spec. A adaptação Vercel inclui funções serverless e persistência PostgreSQL; a validação contra banco real depende da integração na Vercel.
 
