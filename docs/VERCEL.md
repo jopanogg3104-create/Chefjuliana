@@ -4,7 +4,7 @@
 
 1. Na Vercel, abra **Add New → Project**.
 2. Importe o repositório GitHub **jopanogg3104-create/soup**, branch **main**.
-3. Use **Framework Preset: Next.js**, diretório raiz padrão. O `vercel.json` define Next.js e build `npm run build`; a pasta de saída é gerenciada pelo framework. Remova qualquer substituição antiga de saída `public` nas configurações do projeto.
+3. Use **Framework Preset: Next.js**, diretório raiz padrão. O `vercel.json` define Next.js e build `npm run build`; a pasta de saída está explicitamente definida como `.next`. Remova qualquer substituição antiga de saída `public` nas configurações do projeto.
 4. Clique em **Deploy**. A Vercel fornecerá o endereço público `*.vercel.app`.
 
 O WhatsApp +55 (14) 99756-3799 já é o padrão. Nenhuma chave é necessária para visualizar o site e montar a mensagem. Sem banco, o formulário não declara que recebeu o pedido: pede que o visitante envie o resumo no WhatsApp. Abrir o WhatsApp não envia a mensagem automaticamente.
@@ -25,3 +25,7 @@ Confirmar um envio só depois de gravar no banco. Falha de conexão preserva as 
 ## Antes de uso comercial
 
 Ainda confirmar região/serviços, autorizações das fotos, texto da chef e política final de privacidade/retenção. Não associar este deploy a disponibilidade de data, orçamento em reais ou contratação automática.
+
+### Correção de routes-manifest.json
+
+Se a Vercel buscar `public/routes-manifest.json`, existe uma configuração antiga de saída `public`. O `vercel.json` define `outputDirectory: .next` para substituir essa configuração. A compilação deve gerar `.next/routes-manifest.json`; não copie esse arquivo para public.
