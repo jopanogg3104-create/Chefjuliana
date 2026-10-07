@@ -7,3 +7,5 @@
 .chef-profile{display:grid;grid-template-columns:1fr 1fr;gap:9%;align-items:center;background:#ede9df}.chef-portrait img{height:auto;aspect-ratio:3/4;object-fit:contain}.chef-story h2{font-size:clamp(58px,6.8vw,94px);margin-bottom:25px}.chef-name{display:block;font-size:10px;letter-spacing:2px;margin-bottom:30px}.chef-story>p{color:#60685e;margin-bottom:22px;max-width:400px}.chef-story .chef-invitation{font:italic 28px/1.25 'Cormorant Garamond',Georgia,serif;color:var(--green);margin-top:30px;margin-bottom:30px}.chef-social{display:block;font-size:11px;margin-top:24px;color:#60685e}@media(max-width:800px){.chef-profile{grid-template-columns:1fr;gap:42px}.chef-story h2{font-size:64px}.chef-portrait{max-width:480px;width:100%;margin:auto}.chef-story>p{max-width:none}}
 
 .experience{font-size:clamp(23px,2.3vw,32px)}
+
+.close{font-size:12px;padding:8px}.hero-link{min-height:48px}
