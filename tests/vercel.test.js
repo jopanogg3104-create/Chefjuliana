@@ -1,8 +1,8 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {randomUUID} from 'node:crypto';
-import leads from '../api/leads.js';
-import config from '../api/config.js';
+import leads from '../lib/api/leads.js';
+import config from '../lib/api/config.js';
 import {validateLead,editHash,leadPayload} from '../lib/leads.js';
 function response(){return {code:0,body:null,setHeader(){},status(n){this.code=n;return this;},json(value){this.body=value;return this;}};}
 const valid={key:randomUUID(),name:'Pessoa de teste',phone:'11999999999',event:'Aniversário',guests:'31–50',city:'Teste, SP',date:'',notes:'Teste',email:'',privacy:true};

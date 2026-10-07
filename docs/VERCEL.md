@@ -4,7 +4,7 @@
 
 1. Na Vercel, abra **Add New → Project**.
 2. Importe o repositório GitHub **jopanogg3104-create/soup**, branch **main**.
-3. Use **Framework Preset: Other**, diretório raiz padrão. O `vercel.json` define build `npm run build` e diretório de saída `public`.
+3. Use **Framework Preset: Next.js**, diretório raiz padrão. O `vercel.json` define Next.js e build `npm run build`; a pasta de saída é gerenciada pelo framework. Remova qualquer substituição antiga de saída `public` nas configurações do projeto.
 4. Clique em **Deploy**. A Vercel fornecerá o endereço público `*.vercel.app`.
 
 O WhatsApp +55 (14) 99756-3799 já é o padrão. Nenhuma chave é necessária para visualizar o site e montar a mensagem. Sem banco, o formulário não declara que recebeu o pedido: pede que o visitante envie o resumo no WhatsApp. Abrir o WhatsApp não envia a mensagem automaticamente.

@@ -1,13 +1,15 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {spawn} from 'node:child_process';
-import {mkdtemp,readFile,rm} from 'node:fs/promises';
-import {tmpdir} from 'node:os';
-import {join} from 'node:path';
 import {randomUUID} from 'node:crypto';
-const dir=await mkdtemp(join(tmpdir(),'soup-test-'));let child;const base='http://127.0.0.1:3199';
-async function start(){child=spawn(process.execPath,['server.js'],{env:{...process.env,PORT:'3199',DATA_DIR:dir},stdio:['ignore','pipe','pipe']});await new Promise((ok,bad)=>{child.stdout.once('data',ok);child.once('error',bad);child.once('exit',code=>bad(Error('Server exited '+code)))});}
-async function stop(){await new Promise(ok=>{child.once('exit',ok);child.kill()})}
-const payload={key:randomUUID(),name:'Pessoa de teste',phone:'11999999999',event:'Atendimento em domicílio',guests:'1–10',experience:'Encontros à mesa',city:'Teste, SP',date:'',notes:'Teste',email:'',privacy:true};
-const post=d=>fetch(base+'/api/leads',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)});
-test('orçamento: validação, acesso privado, idempotência, edição e persistência',async()=>{try{await start();assert.equal((await fetch(base)).status,200);assert.equal((await post({...payload,name:''})).status,400);assert.equal((await fetch(base+'/api/leads')).status,405);assert.equal((await fetch(base+'/data/leads.json')).status,404);const a=await post(payload);assert.equal(a.status,201);const first=await a.json();const second=await(await post(payload)).json();assert.equal(first.id,second.id);await post({...payload,notes:'Alterado'});let rows=JSON.parse(await readFile(join(dir,'leads.json'),'utf8'));assert.equal(rows.length,1);assert.equal(rows[0].notes,'Alterado');assert.equal(rows[0].experience,'Encontros à mesa');await stop();await start();await post(payload);rows=JSON.parse(await readFile(join(dir,'leads.json'),'utf8'));assert.equal(rows.length,1);const denied=await fetch(base+'/api/leads',{method:'POST',headers:{Origin:'https://outside.example','Content-Type':'application/json'},body:JSON.stringify(payload)});assert.equal(denied.status,403);}finally{if(child?.exitCode===null)await stop();await rm(dir,{recursive:true,force:true})}});
+test('Next.js em produção: páginas, APIs e WhatsApp sem credenciais',async()=>{
+ const child=spawn(process.execPath,['node_modules/next/dist/bin/next','start','-p','3199'],{env:{...process.env,DATABASE_URL:'',POSTGRES_URL:'',WHATSAPP_NUMBER:'5514997563799'},stdio:['ignore','pipe','pipe']});
+ try{
+ await new Promise((ok,bad)=>{let output='';const timer=setTimeout(()=>bad(Error('Next.js não iniciou')),30000);child.stdout.on('data',chunk=>{output+=chunk;if(output.includes('Ready')){clearTimeout(timer);ok();}});child.on('error',e=>{clearTimeout(timer);bad(e)});child.on('exit',code=>{clearTimeout(timer);bad(Error('Next.js saiu: '+code))});});
+ const base='http://127.0.0.1:3199';
+ for(const route of ['/','/orcamento','/privacidade']){const r=await fetch(base+route);assert.equal(r.status,200);const html=await r.text();assert.ok(html.includes('__NEXT_DATA__'));assert.ok(html.includes('Esta é'));}
+ const settings=await(await fetch(base+'/api/config')).json();assert.equal(settings.whatsapp,'5514997563799');assert.equal(settings.storageAvailable,false);
+ const payload={key:randomUUID(),name:'Pessoa de teste',phone:'11999999999',event:'Atendimento em domicílio',guests:'1–10',experience:'Encontros à mesa',city:'Teste, SP',date:'',notes:'Teste',email:'',privacy:true};
+ const response=await fetch(base+'/api/leads',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});assert.equal(response.status,503);assert.equal((await response.json()).canUseWhatsapp,true);assert.equal((await fetch(base+'/api/leads')).status,405);assert.equal((await fetch(base+'/sitemap.xml')).status,200);
+ }finally{if(child.exitCode===null)await new Promise(ok=>{child.once('exit',ok);child.kill()});}
+});

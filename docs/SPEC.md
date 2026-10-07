@@ -204,3 +204,7 @@ O usuário confirmou que Juliana também é chef domiciliar, atende em domicíli
 ## Atualização de apresentação dos serviços
 
 A pedido do usuário, “Cestas de café da manhã” foi substituído por “Encontros à mesa”, com foco em almoços e jantares em casa. A descrição aprovada é: “Uma refeição especial em casa, pensada com Juliana para receber e compartilhar.” A atualização vale para a home e para novos pedidos do formulário; registros antigos permanecem preservados.
+
+## Migração para Next.js
+
+A pedido do usuário, o projeto foi migrado para Next.js com páginas pré-renderizadas e rotas API. O conteúdo editorial e as interações foram preservados. Sem PostgreSQL, continua funcionando sem credenciais e encaminhando o resumo pelo WhatsApp. O servidor Node anterior e seu armazenamento local foram retirados da aplicação; nenhum arquivo de leads local foi removido.
