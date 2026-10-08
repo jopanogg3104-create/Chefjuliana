@@ -1,5 +1,5 @@
 {
-  "name": "the-fish-restaurante",
+  "name": "chef-juliana-nogueira",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -7,8 +7,7 @@
     "dev": "next dev --hostname 0.0.0.0",
     "start": "next start --hostname 0.0.0.0",
     "test": "node --test",
-    "build": "next build",
-    "admin:setup": "node scripts/admin-setup.js"
+    "build": "next build"
   },
   "engines": {
     "node": "24.x"
