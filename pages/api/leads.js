@@ -1,2 +1,7 @@
-export {default} from '../../lib/api/leads.js';
-export const config={api:{bodyParser:{sizeLimit:'12kb'}}};
+export default function handler(req, res) {
+  res
+    .status(410)
+    .json({
+      error: "Esta rota foi descontinuada. Use o cardápio do The Fish.",
+    });
+}

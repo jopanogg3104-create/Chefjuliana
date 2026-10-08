@@ -1,1 +1,1 @@
-export {default,getStaticProps} from './index.js';
+export { default } from "./index.js";
