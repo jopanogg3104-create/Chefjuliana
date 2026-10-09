@@ -28,15 +28,6 @@ type Lead = {
   email: string;
   privacy: boolean;
 };
-const titles = [
-  "O que você está planejando?",
-  "Para quantas pessoas?",
-  "Para quando você precisa?",
-  "Em qual cidade será?",
-  "Que experiência você imagina?",
-  "Conte um pouco da sua ideia.",
-  "Como podemos falar com você?",
-];
 function today() {
   return new Intl.DateTimeFormat("en-CA", {
     timeZone: "America/Sao_Paulo",
@@ -71,25 +62,18 @@ export default function QuoteDialog({
     email: "",
     privacy: false,
   });
-  const [step, setStep] = useState(0),
-    [error, setError] = useState(""),
+  const [error, setError] = useState(""),
     [result, setResult] = useState<"stored" | "whatsapp" | null>(null),
     [sending, setSending] = useState(false),
     [copyStatus, setCopyStatus] = useState(""),
     [fallback, setFallback] = useState(false);
-  const lock = useRef(false),
-    heading = useRef<HTMLHeadingElement>(null);
+  const lock = useRef(false);
   useEffect(() => {
     if (preset) setData((d) => ({ ...d, experience: preset }));
   }, [preset]);
   function change<K extends keyof Lead>(key: K, value: Lead[K]) {
     setData((d) => ({ ...d, [key]: value }));
     setError("");
-  }
-  function next(n: number) {
-    setStep(n);
-    setError("");
-    setTimeout(() => heading.current?.focus(), 0);
   }
   const message = () =>
     `Olá, Juliana! Conheci seu trabalho pelo site e gostaria de conversar sobre um orçamento.\n\nNome: ${data.name}\nTipo de pedido: ${data.event}\nData: ${data.date || "Ainda não definida"}\nCidade: ${data.city}\nPessoas: ${data.guests}\nExperiência: ${data.experience}\nObservações: ${data.notes || "Sem observações"}`;
@@ -118,20 +102,16 @@ export default function QuoteDialog({
     e.preventDefault();
     if (lock.current) return;
     setError("");
-    if (step === 0 && !data.event) {
+    if (!data.event) {
       setError("Escolha uma ocasião para continuar.");
       return;
     }
-    if (step === 1 && !data.guests) {
+    if (!data.guests) {
       setError("Escolha a quantidade de pessoas.");
       return;
     }
-    if (step === 3 && !data.city.trim()) {
+    if (!data.city.trim()) {
       setError("Informe a cidade e o estado.");
-      return;
-    }
-    if (step < 6) {
-      next(step + 1);
       return;
     }
     if (!/^\d{10,15}$/.test(data.phone.replace(/\D/g, ""))) {
@@ -147,6 +127,11 @@ export default function QuoteDialog({
       return;
     }
     if (config.storageAvailable === false) {
+      window.open(
+        `https://wa.me/${config.whatsapp}?text=${encodeURIComponent(message())}`,
+        "_blank",
+        "noopener,noreferrer",
+      );
       setResult("whatsapp");
       return;
     }
@@ -250,7 +235,7 @@ export default function QuoteDialog({
                 variant="ghost"
                 onClick={() => {
                   setResult(null);
-                  next(6);
+                  setError("");
                 }}
               >
                 Editar respostas
@@ -278,174 +263,128 @@ export default function QuoteDialog({
           </>
         ) : (
           <>
-            <div className="quote-progress">
-              <span>0{step + 1} / 07</span>
-              <span>SEU PRÓXIMO ENCONTRO</span>
-            </div>
-            <div className="progress-track">
-              <span style={{ transform: `scaleX(${(step + 1) / 7})` }} />
-            </div>
-            <DialogTitle asChild>
-              <h2 ref={heading} tabIndex={-1} className="quote-title">
-                {titles[step]}
-              </h2>
+            <DialogTitle className="quote-title">
+              Vamos planejar seu encontro?
             </DialogTitle>
-            <DialogDescription className="sr-only">
-              Preencha o orçamento em sete etapas. Você pode voltar sem perder
-              suas respostas.
+            <DialogDescription>
+              Conte o essencial em uma única tela. Se preferir, fale diretamente
+              no WhatsApp.
             </DialogDescription>
+            <a
+              className="quote-direct text-link"
+              href={`https://wa.me/${config.whatsapp}?text=${encodeURIComponent("Olá, Juliana! Gostaria de conversar sobre um orçamento.")}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <MessageCircle size={18} /> Falar sem formulário
+            </a>
             <form onSubmit={submit}>
-              {step < 2 && (
-                <div
-                  className="quote-options"
-                  role="group"
-                  aria-label={titles[step]}
-                >
-                  {(step === 0 ? occasions : guestRanges).map((v: string) => (
-                    <Button
-                      key={v}
-                      variant="outline"
-                      type="button"
-                      aria-pressed={data[step === 0 ? "event" : "guests"] === v}
-                      className="quote-option"
-                      onClick={() => change(step === 0 ? "event" : "guests", v)}
-                    >
-                      {v}
-                    </Button>
-                  ))}
-                </div>
-              )}
-              {step === 0 && (
-                <p className="form-hint">
-                  Da refeição em casa à celebração: conte o que você tem em
-                  mente.
-                </p>
-              )}
-              {step === 2 && (
-                <>
-                  {field("date", "Data desejada", {
-                    type: "date",
-                    min: today(),
-                  })}
-                  <label className="check-field">
-                    <input
-                      type="checkbox"
-                      checked={!data.date}
-                      onChange={(e) => {
-                        if (e.target.checked) change("date", "");
-                      }}
-                    />
-                    Ainda não defini a data
-                  </label>
-                  <p className="form-hint">
-                    A data será confirmada diretamente com Juliana.
-                  </p>
-                </>
-              )}
-              {step === 3 && (
-                <>
-                  {field("city", "Cidade e estado", {
-                    required: true,
-                    maxLength: 160,
-                    placeholder: "Ex.: Botucatu, SP",
-                    autoComplete: "address-level2",
-                  })}
-                  <p className="form-hint">
-                    A região e as condições de atendimento serão avaliadas na
-                    proposta.
-                  </p>
-                </>
-              )}
-              {step === 4 && (
-                <>
-                  <div
-                    className="quote-options"
-                    role="group"
-                    aria-label="Experiência desejada"
+              <div className="quick-quote-grid">
+                {field("name", "Seu nome", {
+                  required: true,
+                  minLength: 2,
+                  maxLength: 120,
+                  autoComplete: "name",
+                })}
+                {field("phone", "WhatsApp com DDD", {
+                  required: true,
+                  type: "tel",
+                  inputMode: "tel",
+                  maxLength: 30,
+                  autoComplete: "tel",
+                  placeholder: "(14) 99999-9999",
+                })}
+                <label className="form-field">
+                  Ocasião
+                  <select
+                    required
+                    aria-label="Ocasião"
+                    value={data.event}
+                    onChange={(e) => change("event", e.target.value)}
+                  >
+                    <option value="">Selecione</option>
+                    {occasions.map((v: string) => (
+                      <option key={v}>{v}</option>
+                    ))}
+                  </select>
+                </label>
+                <label className="form-field">
+                  Quantidade de pessoas
+                  <select
+                    required
+                    aria-label="Quantidade de pessoas"
+                    value={data.guests}
+                    onChange={(e) => change("guests", e.target.value)}
+                  >
+                    <option value="">Selecione</option>
+                    {guestRanges.map((v: string) => (
+                      <option key={v}>{v}</option>
+                    ))}
+                  </select>
+                </label>
+                {field("city", "Cidade e estado", {
+                  required: true,
+                  maxLength: 160,
+                  placeholder: "Ex.: Botucatu, SP",
+                  autoComplete: "address-level2",
+                })}
+                <label className="form-field">
+                  Experiência
+                  <select
+                    aria-label="Experiência"
+                    value={data.experience}
+                    onChange={(e) => change("experience", e.target.value)}
                   >
                     {experiences.map((v: string) => (
-                      <Button
-                        key={v}
-                        variant="outline"
-                        type="button"
-                        aria-pressed={data.experience === v}
-                        className="quote-option"
-                        onClick={() => change("experience", v)}
-                      >
-                        {v}
-                      </Button>
+                      <option key={v}>{v}</option>
                     ))}
-                  </div>
-                  <p className="form-hint">
-                    Menu, disponibilidade e detalhes são combinados com a chef.
-                  </p>
-                </>
-              )}
-              {step === 5 && (
-                <>
-                  <label className="form-field">
-                    O que você imaginou? (opcional)
-                    <Textarea
-                      rows={4}
-                      maxLength={2000}
-                      value={data.notes}
-                      onChange={(e) => change("notes", e.target.value)}
-                      placeholder="Uma tábua para compartilhar, um jantar especial, uma celebração…"
-                    />
-                  </label>
-                  <p className="form-hint">
-                    Não inclua informações de saúde ou dados sensíveis.
-                  </p>
-                </>
-              )}
-              {step === 6 && (
-                <>
-                  {field("name", "Seu nome", {
-                    required: true,
-                    minLength: 2,
-                    maxLength: 120,
-                    autoComplete: "name",
-                  })}
-                  {field("phone", "WhatsApp com DDD", {
-                    required: true,
-                    type: "tel",
-                    inputMode: "tel",
-                    maxLength: 30,
-                    autoComplete: "tel",
-                    placeholder: "(14) 99999-9999",
-                  })}
-                  {field("email", "E-mail (opcional)", {
-                    type: "email",
-                    maxLength: 254,
-                    autoComplete: "email",
-                  })}
-                  {summary}
-                  <label className="check-field">
-                    <input
-                      type="checkbox"
-                      required
-                      checked={data.privacy}
-                      onChange={(e) => change("privacy", e.target.checked)}
-                    />
-                    <span>
-                      Li o{" "}
-                      <a
-                        href="/privacidade"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        aviso de privacidade
-                      </a>{" "}
-                      e entendo que os dados serão usados para atender meu
-                      orçamento.
-                    </span>
-                  </label>
-                  <p className="form-hint">
-                    Este contato não confirma uma reserva de data ou
-                    contratação.
-                  </p>
-                </>
-              )}
+                  </select>
+                </label>
+              </div>
+              <details className="quote-extra">
+                <summary>Adicionar data ou observações (opcional)</summary>
+                {field("date", "Data desejada (opcional)", {
+                  type: "date",
+                  min: today(),
+                })}
+                <label className="form-field">
+                  O que você imaginou? (opcional)
+                  <Textarea
+                    rows={3}
+                    maxLength={2000}
+                    value={data.notes}
+                    onChange={(e) => change("notes", e.target.value)}
+                    placeholder="Conte sua ideia…"
+                  />
+                </label>
+                <p className="form-hint">
+                  A data será confirmada com Juliana. Não inclua dados
+                  sensíveis.
+                </p>
+              </details>
+              <label className="check-field">
+                <input
+                  type="checkbox"
+                  required
+                  checked={data.privacy}
+                  onChange={(e) => change("privacy", e.target.checked)}
+                />
+                <span>
+                  Li o{" "}
+                  <a
+                    href="/privacidade"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    aviso de privacidade
+                  </a>{" "}
+                  e concordo com o uso dos dados para este orçamento.
+                </span>
+              </label>
+              <p className="form-hint">
+                Menu, valores e disponibilidade sob consulta. Este contato não
+                confirma uma reserva.
+              </p>
               {error && (
                 <p className="form-error" role="alert">
                   {error}
@@ -462,25 +401,15 @@ export default function QuoteDialog({
               )}
               <div className="quote-actions">
                 <Button
-                  type="button"
-                  variant="ghost"
-                  disabled={sending}
-                  onClick={() => (step ? next(step - 1) : onOpenChange(false))}
-                >
-                  {step ? "Voltar" : "Agora não"}
-                </Button>
-                <Button
                   type="submit"
                   className="brand-button"
                   disabled={sending}
                 >
                   {sending
                     ? "Salvando…"
-                    : step === 6
-                      ? config.storageAvailable === false
-                        ? "Preparar mensagem"
-                        : "Enviar pedido"
-                      : "Continuar"}
+                    : config.storageAvailable === false
+                      ? "Continuar no WhatsApp"
+                      : "Solicitar orçamento"}
                   <ArrowRight size={17} />
                 </Button>
               </div>

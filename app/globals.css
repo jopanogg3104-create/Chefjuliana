@@ -1972,3 +1972,81 @@ figcaption {
     transform: none;
   }
 }
+
+/* Orçamento direto: todos os campos essenciais na mesma tela. */
+.quick-quote-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 18px;
+  margin-top: 20px;
+}
+.quick-quote-grid .form-field {
+  margin: 0;
+  font-size: 14px;
+}
+.form-field select {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  font: inherit;
+  font-size: 16px;
+  color: var(--ink);
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+}
+.quote-direct {
+  margin-top: 14px;
+  min-height: 44px;
+  font-size: 14px;
+}
+.quote-extra {
+  margin-top: 20px;
+}
+.quote-extra summary {
+  min-height: 44px;
+  padding-block: 12px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.quote-dialog .check-field,
+.quote-dialog .form-hint {
+  font-size: 13px;
+}
+@media (max-width: 480px) {
+  .quick-quote-grid {
+    gap: 12px;
+  }
+  .quick-quote-grid .form-field {
+    font-size: 13px;
+  }
+  .quick-quote-grid input,
+  .quick-quote-grid select {
+    min-width: 0;
+    font-size: 16px;
+  }
+}
+.quote-dialog .quote-title {
+  font-size: 36px;
+  line-height: 1.08;
+  margin-block: 8px;
+}
+.quote-dialog .dialog-brand {
+  margin-bottom: 0;
+}
+.quote-dialog .quote-actions > .brand-button:first-child {
+  width: 100%;
+  padding: 13px 18px;
+  min-height: 48px;
+}
+.quote-dialog .form-field {
+  min-width: 0;
+}
+@media (max-width: 375px) {
+  .quick-quote-grid {
+    grid-template-columns: 1fr;
+  }
+  .quote-dialog .quote-title {
+    font-size: 30px;
+  }
+}

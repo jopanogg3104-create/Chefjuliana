@@ -10,7 +10,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import {
-  ArrowDown,
   ArrowRight,
   ArrowUpRight,
   Check,
@@ -71,7 +70,7 @@ const services = [
 const questions = [
   [
     "Como faço para pedir um orçamento?",
-    "Clique em “Planejar meu encontro” e conte a ocasião, a quantidade de pessoas, a cidade e a sua ideia. Você poderá revisar as respostas e continuar a conversa com Juliana pelo WhatsApp.",
+    "Clique em “Pedir orçamento” e conte a ocasião, a quantidade de pessoas, a cidade e a sua ideia. Preencha tudo em uma única tela ou fale diretamente no WhatsApp, sem formulário.",
   ],
   [
     "Posso contratar para poucas pessoas?",
@@ -293,12 +292,17 @@ export default function Landing({
                 className="brand-button hero-cta"
                 onClick={() => openQuote()}
               >
-                Planejar meu encontro
+                Pedir orçamento
                 <ArrowUpRight size={19} />
               </Button>
-              <a href="#experiencias" className="text-link">
-                Conhecer experiências
-                <ArrowDown size={16} />
+              <a
+                href={`https://wa.me/${config.whatsapp}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-link"
+              >
+                Falar no WhatsApp
+                <MessageCircle size={16} />
               </a>
             </div>
             <div className="hero-confidence">
@@ -777,7 +781,7 @@ export default function Landing({
               className="brand-button closing-button"
               onClick={() => openQuote()}
             >
-              Planejar meu encontro
+              Pedir orçamento
               <ArrowUpRight size={20} />
             </Button>
             <p>Sem compromisso. Com espaço para suas ideias.</p>
@@ -814,7 +818,7 @@ export default function Landing({
           <span>WhatsApp</span>
         </a>
         <Button className="brand-button" onClick={() => openQuote()}>
-          Planejar meu encontro
+          Pedir orçamento
           <ArrowUpRight size={16} />
         </Button>
       </div>

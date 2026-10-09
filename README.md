@@ -1,6 +1,6 @@
 # Chef Juliana Nogueira
 
-Site em Next.js com páginas pré-renderizadas, portfólio responsivo, apresentação da chef, formulário em sete passos e mensagem estruturada para WhatsApp.
+Site em Next.js com páginas pré-renderizadas, portfólio responsivo, apresentação da chef, formulário em uma única tela e mensagem estruturada para WhatsApp.
 
 ## Executar
 
@@ -9,7 +9,7 @@ Node.js 24. `npm ci`, seguido de `npm run dev` para desenvolvimento. Para produ�
 ## Organização
 
 - `app/`: páginas App Router, metadados e estilos da nova apresentação.
-- `components/landing/`: página interativa e formulário de orçamento em sete etapas.
+- `components/landing/`: página interativa e formulário de orçamento em uma única tela.
 - `components/ui/`: componentes shadcn/ui personalizados e acessíveis.
 - `pages/`: APIs existentes e sitemap.
 - `public/`: fotos, vídeos e fontes locais fornecidos anteriormente.
