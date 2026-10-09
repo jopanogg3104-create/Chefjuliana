@@ -8,10 +8,13 @@ Node.js 24. `npm ci`, seguido de `npm run dev` para desenvolvimento. Para produ�
 
 ## Organização
 
-- `pages/`: páginas e rotas de API do Next.js.
-- `components/Site.js`: apresentação React e metadados.
-- `content/site.html`: conteúdo editorial existente, renderizado estaticamente pelo componente para preservar a direção de arte.
-- `public/`: fotos, vídeos, fontes locais e interação do briefing.
+- `app/`: páginas App Router, metadados e estilos da nova apresentação.
+- `components/landing/`: página interativa e formulário de orçamento em sete etapas.
+- `components/ui/`: componentes shadcn/ui personalizados e acessíveis.
+- `pages/`: APIs existentes e sitemap.
+- `public/`: fotos, vídeos e fontes locais fornecidos anteriormente.
+- `content/site.html`, `components/Site.js` e scripts antigos: referência da apresentação anterior, sem uso nas novas páginas.
+- `docs/DESIGN.md`: direção visual e adaptação da skill fornecida, sem depoimentos inventados.
 - `lib/`: validação, configuração e persistência PostgreSQL.
 
 ## Publicação sem credenciais
